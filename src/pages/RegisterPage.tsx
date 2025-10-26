@@ -4,9 +4,9 @@ import Input from '../components/ui/Input'
 import AuthLayout from '../components/layout/AuthLayout'
 
 const RegisterPage = () => {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [registerStatus, setRegisterStatus] = useState<
     'idle' | 'loading' | 'success' | 'error'
@@ -93,7 +93,7 @@ const RegisterPage = () => {
           disabled={registerStatus === 'loading'}
           type="submit"
         >
-          登入
+          註冊
         </Button>
         {error && <p className="text-sm text-red-600">{error}</p>}
       </form>

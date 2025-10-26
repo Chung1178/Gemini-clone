@@ -26,13 +26,13 @@ const LoginPage = () => {
     e.preventDefault()
     setError(null)
 
-    if (password.length < 6) {
-      setError('密碼長度不能少於 6 個字元！')
+    if (!email || !password) {
+      setError('欄位不得為空')
       return
     }
 
-    if (!email) {
-      setError('請輸入電子信箱！')
+    if (password.length < 6) {
+      setError('密碼長度不能少於 6 個字元！')
       return
     }
 
