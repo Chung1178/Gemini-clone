@@ -1,8 +1,14 @@
-import React, { createContext, useState, useContext } from 'react'
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useMemo,
+  useCallback,
+} from 'react'
 
 type User = {
-  id: number
-  name: string
+  id?: number
+  name?: string
   email: string
 }
 
@@ -21,18 +27,15 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
 
-  const login = (userData: User) => {
+  const login = useCallback((userData: User) => {
     setUser(userData)
-  }
-  const logout = () => {
-    setUser(null)
-  }
+  }, [])
 
-  const value = {
-    user,
-    login,
-    logout,
-  }
+  const logout = useCallback(() => {
+    setUser(null)
+  }, [])
+
+  const value = useMemo(() => ({ user, login, logout }), [user, login, logout])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import AuthLayout from '../components/layout/AuthLayout'
+import { useAuth } from '../context/AuthContext'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -11,16 +12,19 @@ const LoginPage = () => {
     'idle' | 'loading' | 'success' | 'error'
   >('idle')
 
+  const { login } = useAuth()
+
   useEffect(() => {
     if (loginStatus === 'success') {
-      alert('登入成功，歡迎回來！')
+      // alert('登入成功，歡迎回來！')
+      login({ email }) // 呼叫 context 的 login 方法來設定使用者狀態
       setError(null)
     }
     if (loginStatus === 'error') {
       setError('信箱或密碼錯誤！')
       setLoginStatus('idle')
     }
-  }, [loginStatus])
+  }, [loginStatus, login, email])
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
