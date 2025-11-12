@@ -1,62 +1,54 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import AuthLayout from '../components/layout/AuthLayout'
-import { useAuth } from '../context/AuthContext'
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [loginStatus, setLoginStatus] = useState<
+  const [registerStatus, setRegisterStatus] = useState<
     'idle' | 'loading' | 'success' | 'error'
   >('idle')
 
-  const { login } = useAuth()
-
   useEffect(() => {
-    if (loginStatus === 'success') {
-      // alert('登入成功，歡迎回來！')
-      login({ email }) // 呼叫 context 的 login 方法來設定使用者狀態
+    if (registerStatus === 'success') {
+      alert('註冊成功！')
       setError(null)
     }
-    if (loginStatus === 'error') {
-      setError('信箱或密碼錯誤！')
-      setLoginStatus('idle')
+    if (registerStatus === 'error') {
+      alert('註冊失敗')
+      setRegisterStatus('idle')
     }
-  }, [loginStatus, login, email])
+  }, [registerStatus])
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
 
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       setError('欄位不得為空')
       return
     }
-
     if (password.length < 6) {
       setError('密碼長度不能少於 6 個字元！')
       return
     }
-
-    setLoginStatus('loading')
+    if (password !== confirmPassword) {
+      setError('密碼與確認密碼不符')
+      return
+    }
+    setRegisterStatus('loading')
 
     setTimeout(() => {
-      if (email === 'test@test.com' && password === '123456789') {
-        setLoginStatus('success')
-      } else {
-        setLoginStatus('error')
-      }
+      setRegisterStatus('success')
     }, 1500)
-
-    // setError('')
   }
 
   return (
-    <AuthLayout title="歡迎來到 Gemini Clone">
-      <form className="space-y-6" onSubmit={handleLogin}>
-        {/* 我們把 state (email) 和 setState (setEmail) 交給 Input 元件控制 */}
+    <AuthLayout title="建立您的帳號">
+      <form className="space-y-6" onSubmit={handleRegister}>
         <Input
           id="email"
           label="電子信箱"
@@ -70,7 +62,6 @@ const LoginPage = () => {
           autoComplete="email"
           error={!!error}
         />
-        {/* 我們把 state (password) 和 setState (setPassword) 交給另一個 Input 元件控制 */}
         <Input
           id="password"
           label="密碼"
@@ -84,12 +75,25 @@ const LoginPage = () => {
           autoComplete="current-password"
           error={!!error}
         />
+        <Input
+          id="confirmPassword"
+          label="確認密碼"
+          type="password"
+          placeholder="••••••••"
+          value={confirmPassword}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value)
+            setError(null)
+          }}
+          autoComplete="current-password"
+          error={!!error}
+        />
         <Button
           className="w-full"
-          disabled={loginStatus === 'loading'}
+          disabled={registerStatus === 'loading'}
           type="submit"
         >
-          登入
+          註冊
         </Button>
         {error && <p className="text-sm text-red-600">{error}</p>}
       </form>
@@ -97,4 +101,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default RegisterPage

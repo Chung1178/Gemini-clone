@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import clsx from 'clsx'
 
 type InputProps = {
+  id: string
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
@@ -18,6 +19,7 @@ const Input = ({
   type = 'text',
   label,
   className,
+  id,
   ...rest
 }: InputProps) => {
   const baseStyles =
@@ -29,11 +31,15 @@ const Input = ({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="text-sm font-medium leading-6 text-gray-900">
+        <label
+          htmlFor={id}
+          className="text-sm font-medium leading-6 text-gray-900"
+        >
           {label}
         </label>
       )}
       <input
+        id={id}
         type={type}
         className={twMerge(
           clsx(baseStyles, error ? errorStyles : normalStyles, className)
